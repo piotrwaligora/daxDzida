@@ -1,0 +1,9 @@
+# regression-test build output
+tests/build/
+
+# MetaEditor / MetaTrader artefacts
+*.ex5
+*.log
+
+# research output produced by a run (results are supplied per-run, not tracked)
+*.csv
