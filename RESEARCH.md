@@ -345,7 +345,8 @@ robustness work that Phase 1 does not do.
 6. MQL5 compilation happens on the user's Windows machine (`tools\compile.cmd`);
    the development workspace is Linux with no MetaEditor. The EA source is
    pre-flight parsed against MT5 API stubs there, which catches ordinary compile
-   failures but not MQL5-only rules.
+   failures but not MQL5-only rules. **The EA now compiles cleanly** (see the
+   change log), so this is a workflow constraint rather than an open risk.
 7. The `DAX po DAXie` idea and every discretionary filter the source trader uses
    are deliberately absent, so this measures the mechanical core only.
 
@@ -395,3 +396,9 @@ something that passes vacuously.
 - **2026-09-02** — Added the Windows command-line build (`tools/compile.cmd`),
   an MQL5 pre-flight syntax check and tests for the MetaEditor log parser.
   No trading behaviour changed.
+- **2026-09-02** — First MetaEditor compile on the target machine:
+  `Result: 0 errors, 0 warnings, 804 ms elapsed, cpu='X64 Regular'`. Terminal:
+  Tickmill Europe MT5. All includes resolved through the junctions
+  (`Trade/Trade.mqh`, `daxDzida/DzCore.mqh`, `daxDzida/DzTime.mqh`) and a
+  70 674-byte `.ex5` was produced. The build toolchain is verified end to end;
+  **still no backtest results of any kind.**

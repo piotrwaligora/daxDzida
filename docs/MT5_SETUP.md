@@ -47,6 +47,10 @@ the repository, which is how a build silently drifts from the code under test.
 
 Sections 1 and 2 describe what it does, for when it has to be done by hand.
 
+**Verified working** on 2026-09-02 against Tickmill Europe MT5:
+`Result: 0 errors, 0 warnings, 804 ms elapsed`, with all includes resolving
+through the junctions and a `.ex5` produced in the repository.
+
 ## 1. Link the repository into the MT5 data folder
 
 In MetaTrader 5: **File → Open Data Folder**. That opens something like
