@@ -164,9 +164,23 @@ common folder, which every tester agent can reach:
 
 The CSV delimiter is `;`.
 
+### 6.1 Making results readable from the repository
+
+`Common\Files` sits outside the repository, so every result would otherwise have
+to be copied by hand. Run once:
+
+```bat
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\Link-Results.ps1
+```
+
+That creates a junction `<repo>\results` → `%APPDATA%\MetaQuotes\Terminal\Common\Files`.
+Read-only convenience, nothing is copied, and `results/` is git-ignored so MT5
+output cannot be committed by accident.
+
 ## 7. What to send back after a run
 
-1. The CSV named above.
+1. The CSV named above — or, with the junction in place, just say the run is
+   done and it can be read from `results\`.
 2. The Strategy Tester **Journal** tab (it contains the environment block: symbol
    spec, session times, timezone model, and the end-of-run summary).
 3. For research runs, the Strategy Tester **Report** (Backtest tab → right-click
