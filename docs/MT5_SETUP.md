@@ -13,6 +13,40 @@ MQL5/
 
 ---
 
+## 0. The one command
+
+Everything in sections 1 and 2 is automated. From the repository root:
+
+```bat
+tools\compile.cmd
+```
+
+or equivalently:
+
+```powershell
+powershell -NoProfile -ExecutionPolicy Bypass -File tools\Compile-DaxDzida.ps1
+```
+
+It locates the MT5 data folder belonging to your MetaEditor install, creates the
+junctions below if they are missing, compiles the EA, writes the compiler log to
+`build\metaeditor-compile.log`, reports errors and warnings **separately**, runs
+whatever of the test suite exists on Windows, and exits non-zero on any error.
+
+Useful switches:
+
+| Switch | Effect |
+|---|---|
+| `-MetaEditor "<path>"` | use a different MetaEditor (default: Tickmill Europe MT5 Terminal) |
+| `-DataFolder "<path>"` | skip auto-detection (use the path from File → Open Data Folder) |
+| `-SkipTests` | compile only |
+| `-NoLink` | assume the junctions already exist |
+
+The script refuses to continue if it finds a **real directory** where a junction
+should be — that would mean MT5 is compiling a *copy* of the sources rather than
+the repository, which is how a build silently drifts from the code under test.
+
+Sections 1 and 2 describe what it does, for when it has to be done by hand.
+
 ## 1. Link the repository into the MT5 data folder
 
 In MetaTrader 5: **File → Open Data Folder**. That opens something like
@@ -36,12 +70,28 @@ kind of mistake that silently invalidates a run.
 
 ## 2. Compile
 
-Open `MQL5\Experts\daxDzida\DaxDzida_Phase1.mq5` in MetaEditor and press **F7**.
+Either press **F7** in MetaEditor, or use the command line, which is what
+`tools\compile.cmd` runs:
 
-Expected: **0 errors**. Investigate any warning rather than ignoring it, and send
-the compiler output back if anything appears — MQL5 compilation could not be
-verified in the development environment (Linux, no MetaEditor), so the first
-compile on Windows is genuine new information.
+```
+"C:\Program Files\Tickmill Europe MT5 Terminal\MetaEditor64.exe" ^
+    /compile:"<DATA FOLDER>\MQL5\Experts\daxDzida\DaxDzida_Phase1.mq5" ^
+    /inc:"<DATA FOLDER>\MQL5" ^
+    /log:"<REPO>\build\metaeditor-compile.log"
+```
+
+Compiling *through the junction* matters: `/inc:` pointing at the terminal's
+`MQL5` folder is what lets `#include <daxDzida/DzCore.mqh>` and
+`#include <Trade/Trade.mqh>` both resolve, and it puts the `.ex5` exactly where
+the Strategy Tester expects it.
+
+Expected: **0 errors**. Warnings are reported separately and should be
+investigated rather than ignored.
+
+MetaEditor's exit code is not trusted — some builds return 0 regardless — so the
+log itself is parsed. That parser has its own tests
+(`pwsh -NoProfile -File tools\Test-MetaEditorLog.ps1`), because a parser bug
+would report a clean build on a broken one.
 
 ## 3. Make sure real ticks exist
 

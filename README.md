@@ -21,18 +21,35 @@ trading system. No optimisation, no parameter search, no discretionary filters.
 | `MQL5/Include/daxDzida/DzCore.mqh` | the entire research state machine |
 | `MQL5/Experts/daxDzida/DaxDzida_Phase1.mq5` | thin MT5 adapter: ticks in, orders and CSV out |
 | `MQL5/Presets/` | the pre-registered A1/A2/B1/B2/C1/C2 + TZDIAG presets |
+| `tools/` | one-command MetaEditor compile for Windows, and its own tests |
 | `tests/` | deterministic regression tests and a mutation check |
 
 ## Tests
 
 ```bash
-./tests/run_tests.sh        # behavioural tests + CSV schema + preset check
+./tests/run_tests.sh        # behavioural tests + EA pre-flight + CSV schema + presets
 ./tests/mutation_check.sh   # proves the suite actually catches broken logic
 ```
 
 The research logic is written in the common subset of MQL5 and C++, so
 `tests/run_tests.sh` compiles and exercises **the same source files** that
 MetaEditor compiles into the Expert Advisor. No second implementation to drift.
+
+The EA itself is additionally parsed against MT5 API stubs
+(`tests/mql5_syntax_check.py`), which catches ordinary compile failures on any
+platform. That is a pre-flight, not a substitute for MetaEditor.
+
+## Building
+
+On Windows, with MetaTrader 5 installed:
+
+```bat
+tools\compile.cmd
+```
+
+Sets up the junctions, compiles the EA with MetaEditor from the command line,
+separates errors from warnings, and fails loudly on either a compile error or a
+source *copy* where a junction should be. See `docs/MT5_SETUP.md`.
 
 ## Ground rules
 

@@ -342,8 +342,10 @@ robustness work that Phase 1 does not do.
 4. No modelled slippage beyond what the tester's real-tick spread produces.
 5. Commission/swap inclusion depends on the broker's tester configuration and
    must be read from the actual report.
-6. MQL5 compilation could not be verified in this environment (Linux workspace,
-   no MetaEditor). First compilation happens on the user's Windows machine.
+6. MQL5 compilation happens on the user's Windows machine (`tools\compile.cmd`);
+   the development workspace is Linux with no MetaEditor. The EA source is
+   pre-flight parsed against MT5 API stubs there, which catches ordinary compile
+   failures but not MQL5-only rules.
 7. The `DAX po DAXie` idea and every discretionary filter the source trader uses
    are deliberately absent, so this measures the mechanical core only.
 
@@ -367,6 +369,18 @@ reversal cap · gap-through entry · entry-at/beyond-TP overshoot · entry beyon
 decomposition · zero-range zone rejection · no-ticks states · forced close at a
 day boundary · CSV schema · preset/matrix agreement.
 
+`tests/mql5_syntax_check.py` additionally parses the real EA source against MT5
+API stubs (`tests/shim/mt5_api_shim.h`), catching typos, unbalanced braces,
+undeclared identifiers, wrong argument counts and wrong return types without a
+Windows round trip. It cannot check MQL5-only rules — `input` / `input group`
+syntax, `#property` directives, MQL5's struct-by-reference requirement or its
+conversion warnings — so a green pre-flight means "worth compiling", never
+"compiles".
+
+`tools/Test-MetaEditorLog.ps1` covers the MetaEditor log decoder and parser in
+the build script, across UTF-16LE (with and without BOM) and UTF-8, because a
+parser bug there would report a clean build on a broken one.
+
 `tests/mutation_check.sh` deliberately breaks fourteen critical behaviours one at
 a time and asserts the suite goes red for each, so the suite cannot rot into
 something that passes vacuously.
@@ -378,3 +392,6 @@ something that passes vacuously.
 - **2026-09-02** — Phase 1 pre-registration written; research EA, portable core,
   regression suite, mutation check and presets implemented. No backtest results
   exist yet.
+- **2026-09-02** — Added the Windows command-line build (`tools/compile.cmd`),
+  an MQL5 pre-flight syntax check and tests for the MetaEditor log parser.
+  No trading behaviour changed.

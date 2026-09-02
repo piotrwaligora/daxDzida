@@ -7,3 +7,6 @@ tests/build/
 
 # research output produced by a run (results are supplied per-run, not tracked)
 *.csv
+
+# MetaEditor / compile output
+build/
