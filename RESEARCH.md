@@ -271,6 +271,54 @@ filtered in analysis rather than silently dropped by the EA.
 
 ---
 
+## 7a. Broker and clock, as verified on 2026-09-02
+
+Established by the TZDIAG run (`analysis/analyze_tzdiag.py`, 188 days,
+2025-12-01 → 2026-08-31, 19 020 678 real ticks):
+
+| Item | Value |
+|---|---|
+| Broker / account | TickmillEU-Demo |
+| Symbol | `DE40`, digits 2, point 0.01, tick size 0.01, tick value 0.01 |
+| Contract size | 1.00, profit currency EUR, min volume 0.01 |
+| Server clock | **EET/EEST — confirmed**, `serverMinusWarsawSec = 3600` on all 188 days |
+| Server UTC offset | +2 h on 80 days, +3 h on 108 days |
+| Warsaw UTC offset | +1 h on 80 days, +2 h on 108 days |
+| DST transition | between Fri 2026-03-27 and Mon 2026-03-30, bracketing Sunday 2026-03-29 |
+| `tzFlag` | 0 on every day — no ambiguous or non-existent timestamps |
+| Quoting window | ~00:00 → ~22:59 Warsaw on weekdays; no weekend ticks |
+
+`InpServerTzMode = 0` with `InpServerBaseUtcOffsetHrs = 2` is therefore correct
+for this broker, and the pre-registered presets need no change.
+
+Because Warsaw and Frankfurt share CET/CEST, the 08:55–08:59:59.999 zone is
+exactly the five minutes before the **Xetra cash open at 09:00**, and the
+breakout is measured from the opening auction onwards. The setup is coherent
+with the instrument.
+
+### Data quality
+
+- 188 of 196 weekdays carry ticks. The 8 without are all exchange holidays:
+  2025-12-24, 12-25, 12-26, 12-31, 2026-01-01, 2026-04-03 (Good Friday),
+  2026-04-06 (Easter Monday), 2026-05-01. **Nothing was excluded by hand.**
+- Every day's first tick is at or before 02:15 Warsaw and every day's last tick
+  is at or after 21:58, so the zone window and both cutoffs are always reachable.
+- Tick volume: mean 101 173/day, median 94 599, minimum 27 557 (2025-12-23).
+  Thin days cluster around the holidays, as expected. No day looks corrupt.
+- **Open item:** the diagnostic reports the first and last tick of each day, not
+  tick counts *inside* 08:55–09:00. A gap over that window would surface only as
+  `NO_TICKS` / `zoneTicks` in a research run's session CSV. Expected valid
+  sessions: **188**.
+
+### Consequence for the metrics
+
+Volume is the broker minimum (0.01 lot) and one index point is worth 0.01 EUR at
+that size, so money P&L and MT5's percentage drawdown are near-zero by
+construction and carry no information. **Drawdown, expectancy and Profit Factor
+for Phase 1 are computed in index points from the session CSV**, not from the
+tester's money-based report. `netPnLMoney` is retained only as a cross-check that
+commission and swap are being applied.
+
 ## 8. Timezone handling
 
 A timezone error invalidates the entire study, so it is treated as a first-class
@@ -396,6 +444,11 @@ something that passes vacuously.
 - **2026-09-02** — Added the Windows command-line build (`tools/compile.cmd`),
   an MQL5 pre-flight syntax check and tests for the MetaEditor log parser.
   No trading behaviour changed.
+- **2026-09-02** — TZDIAG run completed on TickmillEU-Demo / DE40 over
+  2025-12-01 → 2026-08-31. Clock **verified** (see §7a): the server is EET/EEST,
+  a constant one hour ahead of Warsaw all year, `tzFlag = 0` everywhere, DST
+  transition observed in the right place. 188 usable trading days out of 196
+  weekdays, the 8 gaps being exchange holidays. Cleared to run A1.
 - **2026-09-02** — First MetaEditor compile on the target machine:
   `Result: 0 errors, 0 warnings, 804 ms elapsed, cpu='X64 Regular'`. Terminal:
   Tickmill Europe MT5. All includes resolved through the junctions
