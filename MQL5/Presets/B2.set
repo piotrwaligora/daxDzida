@@ -1,0 +1,28 @@
+; daxDzida Phase 1 pre-registered configuration B2
+; As B1 with the hard exit moved to 10:00 Warsaw
+;
+; GENERATED FILE - edit MQL5/Presets/generate_presets.py instead.
+; Load in the MT5 Strategy Tester: Inputs tab -> Load.
+
+InpRunMode=0
+InpConfigId=B2
+InpRequireSymbolSubstring=
+InpZoneStartHour=8
+InpZoneStartMinute=55
+InpZoneEndHour=9
+InpZoneEndMinute=0
+InpCutoffHour=10
+InpCutoffMinute=0
+InpTpMultiplier=1.0
+InpSlMode=0
+InpMaxReversals=0
+InpSkipEntryOnOvershoot=true
+InpServerTzMode=0
+InpServerBaseUtcOffsetHrs=2
+InpVolume=0.0
+InpMagic=8550022
+InpDeviationPoints=100
+InpWriteCsv=true
+InpCsvToCommonFolder=true
+InpCsvPrefix=daxDzida
+InpVerboseLog=false

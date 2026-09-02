@@ -1,0 +1,28 @@
+; daxDzida Phase 1 pre-registered configuration TZDIAG
+; TIMEZONE DIAGNOSTIC: places no orders. Run this FIRST to establish how broker server timestamps map to UTC and Europe/Warsaw.
+;
+; GENERATED FILE - edit MQL5/Presets/generate_presets.py instead.
+; Load in the MT5 Strategy Tester: Inputs tab -> Load.
+
+InpRunMode=1
+InpConfigId=TZDIAG
+InpRequireSymbolSubstring=
+InpZoneStartHour=8
+InpZoneStartMinute=55
+InpZoneEndHour=9
+InpZoneEndMinute=0
+InpCutoffHour=9
+InpCutoffMinute=30
+InpTpMultiplier=1.0
+InpSlMode=1
+InpMaxReversals=0
+InpSkipEntryOnOvershoot=true
+InpServerTzMode=0
+InpServerBaseUtcOffsetHrs=2
+InpVolume=0.0
+InpMagic=8550001
+InpDeviationPoints=100
+InpWriteCsv=true
+InpCsvToCommonFolder=true
+InpCsvPrefix=daxDzida
+InpVerboseLog=false

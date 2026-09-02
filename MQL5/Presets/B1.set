@@ -1,0 +1,28 @@
+; daxDzida Phase 1 pre-registered configuration B1
+; SOURCE-LIKE NO-FIXED-SL DIAGNOSTIC: first breakout only, TP 1.0x range, no fixed SL, hard exit 09:30 Warsaw
+;
+; GENERATED FILE - edit MQL5/Presets/generate_presets.py instead.
+; Load in the MT5 Strategy Tester: Inputs tab -> Load.
+
+InpRunMode=0
+InpConfigId=B1
+InpRequireSymbolSubstring=
+InpZoneStartHour=8
+InpZoneStartMinute=55
+InpZoneEndHour=9
+InpZoneEndMinute=0
+InpCutoffHour=9
+InpCutoffMinute=30
+InpTpMultiplier=1.0
+InpSlMode=0
+InpMaxReversals=0
+InpSkipEntryOnOvershoot=true
+InpServerTzMode=0
+InpServerBaseUtcOffsetHrs=2
+InpVolume=0.0
+InpMagic=8550021
+InpDeviationPoints=100
+InpWriteCsv=true
+InpCsvToCommonFolder=true
+InpCsvPrefix=daxDzida
+InpVerboseLog=false
