@@ -13,3 +13,4 @@ build/
 
 # junction to the MT5 Common\Files folder (tools/Link-Results.ps1)
 results/
+results
